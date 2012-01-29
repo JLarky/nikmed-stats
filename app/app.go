@@ -186,8 +186,9 @@ const IndexHTML =
   <body>
     <div class="wrapper">
       <div class="intro">
-        На этой страничке вы можете посмотреть статистику занятости номерков на прием в поликлинике
-        <a target="_blank" href="http://nikmed.spb.ru/">Николаевской больницы</a>.
+        <p>На этой страничке вы можете посмотреть статистику занятости номерков на прием в поликлинике
+        <a target="_blank" href="http://nikmed.spb.ru/">Николаевской больницы</a>.</p>
+        <p>Информация о доступности номерков проверяется каждые 5 минут.</p>
       </div>
       <div id='chart_div' style='width: 980px; height: 340px;'></div>
       <div id='chart_div2' style='width: 980px; height: 340px;'></div>
