@@ -140,8 +140,11 @@ func post(r *http.Request, uri, postvars string) string {
 var IndexTemplate = template.Must(template.New("book").Parse(IndexHTML))
 
 const IndexHTML =
-`<html>
+`<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="utf-8" />
+    <title>Статистика по свободным номеркам Николаевской больницы Петродворцового района</title>
     <script type='text/javascript' src='http://www.google.com/jsapi'></script>
     <script type='text/javascript'>
       google.load('visualization', '1', {'packages':['annotatedtimeline']});
@@ -172,10 +175,27 @@ const IndexHTML =
         chart.draw(data2, {displayAnnotations: true});
       }
     </script>
+    <style type="text/css">
+        body {margin:0;padding:0;}
+        .wrapper {width: 985px; margin: 10px auto;}
+        .intro {margin: 10px; text-align: center;}
+        .footer {margin: 15px auto; text-align: center;}
+    </style>
   </head>
 
   <body>
-    <div id='chart_div' style='width: 980px; height: 340px;'></div>
-    <div id='chart_div2' style='width: 980px; height: 340px;'></div>
+    <div class="wrapper">
+      <div class="intro">
+        На этой страничке вы можете посмотреть статистику занятости номерков на прием в поликлинике
+        <a target="_blank" href="http://nikmed.spb.ru/">Николаевской больницы</a>.
+      </div>
+      <div id='chart_div' style='width: 980px; height: 340px;'></div>
+      <div id='chart_div2' style='width: 980px; height: 340px;'></div>
+      <div class="footer">
+        <a rel="me" href="https://plus.google.com/104701071096191312666/about">JLarky</a>
+          &copy; 2012 <a href="https://github.com/JLarky/nikmed-stats">
+          <img src="images/github_logo.png" style="vertical-align: -6px;" alt="github"></a>
+      </div>
+    </div>
   </body>
 </html>`

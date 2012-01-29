@@ -7,5 +7,8 @@ handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon.ico
+- url: /images/github_logo\.png
+  static_files: images/github_logo.png
+  upload: images/github_logo.png
 - url: /.*
   script: _go_app
