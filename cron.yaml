@@ -1,0 +1,4 @@
+cron:
+- description: update numbers
+  url: /cron
+  schedule: every 5 mins
