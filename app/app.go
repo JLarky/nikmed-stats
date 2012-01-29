@@ -65,42 +65,18 @@ func update(w http.ResponseWriter, r *http.Request) {
 		count_int = 0
 	    }
 	    switch name {
-		case "акушер-гинекол.": {
-			a.Gynaecologists = count_int
-		}
-		case "дерма-венеролог": {
-			a.Venereologist = count_int
-		}
-		case "кардиолог": {
-			a.Cardiologist = count_int
-		}
-		case "невропатолог": {
-			a.Neurologist = count_int
-		}
-		case "отоларинголог": {
-			a.Otolaryngologist = count_int
-		}
-		case "офтальмолог": {
-			a.Ophthalmologist = count_int
-		}
-		case "проктолог": {
-			a.Proctologist = count_int
-		}
-		case "ревматолог": {
-			a.Rheumatologist = count_int
-		}
-		case "терапевт участ.": {
-			a.Physician = count_int
-		}
-		case "уролог": {
-			a.Urologist = count_int
-		}
-		case "хирург": {
-			a.Surgeon = count_int
-		}
-		case "эндокринолог": {
-			a.Endocrinologist = count_int
-		}
+		case "акушер-гинекол.":	a.Gynaecologists = count_int
+		case "дерма-венеролог":	a.Venereologist = count_int
+		case "кардиолог":	a.Cardiologist = count_int
+		case "невропатолог":	a.Neurologist = count_int
+		case "отоларинголог":	a.Otolaryngologist = count_int
+		case "офтальмолог":	a.Ophthalmologist = count_int
+		case "проктолог":	a.Proctologist = count_int
+		case "ревматолог":	a.Rheumatologist = count_int
+		case "терапевт участ.":	a.Physician = count_int
+		case "уролог":		a.Urologist = count_int
+		case "хирург":		a.Surgeon = count_int
+		case "эндокринолог":	a.Endocrinologist = count_int
 	    }
             fmt.Fprint(w, name, " -> ", count_int, "\n")
 	}
