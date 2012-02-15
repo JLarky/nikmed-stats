@@ -92,9 +92,8 @@ func update(w http.ResponseWriter, r *http.Request) {
 func get_olddata(w http.ResponseWriter, r *http.Request) *bytes.Buffer {
     c := appengine.NewContext(r)
     q := datastore.NewQuery("FreeNumbers").
-        Filter("Date >", 1000).
         Order("-Date").
-        Limit(5000)
+        Limit(4032)
     nums := make([]FreeNumbers, 0, 10)
     if _, err := q.GetAll(c, &nums); err != nil {
         http.Error(w, err.String(), http.StatusInternalServerError)
