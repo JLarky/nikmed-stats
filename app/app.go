@@ -2,22 +2,22 @@ package app
 
 import (
     "fmt"
-    "http"
+    "net/http"
     "appengine"
     "appengine/datastore"
     "appengine/urlfetch"
     "log"
     "io/ioutil"
     "bytes"
-    "url"
+    "net/url"
     "strings"
-    "template"
+    "text/template"
     "time"
     "app/cp1251_utf8"
 )
 
 type FreeNumbers struct {
-    Date		datastore.Time
+    Date		time.Time
     Gynaecologists	int // акушер-гинекол.
     Venereologist	int // дерма-венеролог
     Cardiologist	int // кардиолог
@@ -40,13 +40,13 @@ func init() {
 func handler(w http.ResponseWriter, r *http.Request) {
     data := get_olddata(w, r)
     if err := IndexTemplate.Execute(w, data); err != nil {
-        http.Error(w, err.String(), http.StatusInternalServerError)
+        http.Error(w, err.Error(), http.StatusInternalServerError)
     }
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
     c := appengine.NewContext(r)
-    a := FreeNumbers{Date: datastore.SecondsToTime(time.Seconds())}
+    a := FreeNumbers{Date: time.Now()}
 
     var s = post(r, "http://nikmed.spb.ru/cgi-bin/tcgi1.exe", "COMMAND=2")
     var prefix = "<span style=\"text-align:center;font-size:large;font-family:arial\">"
@@ -83,50 +83,51 @@ func update(w http.ResponseWriter, r *http.Request) {
     }
     _, err := datastore.Put(c, datastore.NewIncompleteKey(c, "FreeNumbers", nil), &a)
     if err != nil {
-        http.Error(w, err.String(), http.StatusInternalServerError)
+        http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 }
 
 
-func get_olddata(w http.ResponseWriter, r *http.Request) *bytes.Buffer {
+func get_olddata(w http.ResponseWriter, r *http.Request) string {
     c := appengine.NewContext(r)
     q := datastore.NewQuery("FreeNumbers").
         Order("-Date").
         Limit(4032)
     nums := make([]FreeNumbers, 0, 10)
     if _, err := q.GetAll(c, &nums); err != nil {
-        http.Error(w, err.String(), http.StatusInternalServerError)
+        http.Error(w, err.Error(), http.StatusInternalServerError)
     }
     data1 := bytes.NewBufferString("");
     data2 := bytes.NewBufferString("");
     for _, n := range nums {
          fmt.Fprintf(data1, "\t  [new Date(%d), \t%d, %d, %d, %d, %d, %d],\n",
-               n.Date/1000, n.Gynaecologists, n.Venereologist, n.Cardiologist,
+               n.Date.Unix()*1000, n.Gynaecologists, n.Venereologist, n.Cardiologist,
                             n.Neurologist, n.Otolaryngologist, n.Ophthalmologist)
          fmt.Fprintf(data2, "\t  [new Date(%d), \t%d, %d, %d, %d, %d, %d],\n",
-               n.Date/1000, n.Proctologist, n.Rheumatologist, n.Physician,
+               n.Date.Unix()*1000, n.Proctologist, n.Rheumatologist, n.Physician,
                             n.Urologist, n.Surgeon, n.Endocrinologist)
     }
 
     data := bytes.NewBufferString("");
     fmt.Fprintf(data, "data.addRows([\n%s\n]);\ndata2.addRows([\n%s\n]);", data1, data2)
-    return data
+    return data.String()
 }
 
 func post(r *http.Request, uri, postvars string) string {
     c:=appengine.NewContext(r)
-    t := urlfetch.Transport{Context:c, DeadlineSeconds: 5.0}
+    deadline, _ := time.ParseDuration("5s")
+    t := urlfetch.Transport{Context:c, Deadline: deadline}
     client := http.Client{Transport: &t}
     // resp, err := client.Get("http://punklan.net/cp1251")
     var params, _ = url.ParseQuery(postvars)
     resp, err := client.PostForm(uri, params)
     if err != nil {
-        log.Print("err %s", err.String())
+        log.Print("err %s", err.Error())
     }
     b,err:=ioutil.ReadAll(resp.Body)
     if err != nil {
-        log.Print("err %s", err.String())
+        log.Print("err %s", err.Error())
     }
     buffer := bytes.NewBufferString("");
     for _, char := range b {
